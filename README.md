@@ -16,14 +16,44 @@ Backend REST API pour une application de blog  avec Spring Boot, PostgreSQL et J
 
 ---
 
-## Endpoints principaux
+## 🔌 Endpoints principaux
 
+###  Endpoints publics (sans authentification)
 | Méthode | Endpoint | Description |
-|---------|---------|-------------|
-| GET     | `/api/v1/articles/search` | Recherche avancée |
-| POST    | `/api/v1/articles` | Créer un article (ROLE: AUTHOR) |
-| POST    | `/api/v1/articles/{id}/cover-image` | Upload d’une image de couverture |
-| GET     | `/api/v1/articles/{id}/comments` | Récupérer les commentaires |
+|---------|----------|-------------|
+| `GET` | `/api/v1/articles/**` | Consultation des articles |
+| `GET` | `/api/v1/comments/**` | Consultation des commentaires |
+| `GET` | `/images/**` | Accès aux images uploadées |
+| `POST` | `/api/v1/auth/**` | Authentification (login, register, refresh) |
+| `GET` | `/api-docs/**` | Documentation OpenAPI |
+| `GET` | `/swagger-ui/**` | Interface Swagger UI |
+| `GET` | `/swagger-ui.html` | Page Swagger UI |
+
+###  Commentaires (utilisateurs authentifiés)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `POST` | `/api/v1/articles/{id}/comments` | Ajouter un commentaire | USER, AUTHOR, ADMIN |
+| `PUT` | `/api/v1/comments/{id}` | Modifier un commentaire | USER, AUTHOR, ADMIN |
+| `DELETE` | `/api/v1/comments/{id}` | Supprimer un commentaire | USER, AUTHOR, ADMIN |
+
+###  Articles (AUTHOR et ADMIN uniquement)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `POST` | `/api/v1/articles` | Créer un nouvel article | AUTHOR, ADMIN |
+| `POST` | `/api/v1/articles/{id}/cover-image` | Uploader une image de couverture | AUTHOR, ADMIN |
+| `PUT` | `/api/v1/articles/{id}` | Modifier un article | AUTHOR, ADMIN |
+| `DELETE` | `/api/v1/articles/{id}` | Supprimer un article | AUTHOR, ADMIN |
+
+###  Administration (ADMIN uniquement)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `*` | `/api/v1/admin/**` | Toutes les opérations d'administration | ADMIN |
+
+###  Autres endpoints
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `*` | `/**` | Tous les autres endpoints non listés | Authentification requise |
+
 
 ---
 
@@ -52,38 +82,40 @@ hasCoverImage - Articles avec image de couverture
 authorId - Articles d'un auteur spécifique
 
 ## Configuration
-Créez un fichier application.yml à la racine du projet :
 
+Créez un fichier `application.yml` à la racine du projet :
+
+```yaml
 server:
   port: 8080
 
 spring:
   application:
     name: blog-backend
-
+  
   datasource:
     url: jdbc:postgresql://localhost:5432/blogdb
     username: ton_utilisateur           # Remplace par ton username PostgreSQL
     password: ton_mot_de_passe          # Remplace par ton mot de passe
     driver-class-name: org.postgresql.Driver
-
-spring:
+  
   jpa:
     hibernate:
-      ddl-auto: validate        
-    show-sql: true              
+      ddl-auto: validate
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Dialecte PostgreSQL
-        format_sql: true       
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml  # Fichier de migration
+    change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
 
 jwt:
   secret: ton_secret_jwt                # Remplace par une clé aléatoire pour JWT
-  expiration: 86400000
-  refresh-expiration: 604800000
+  expiration: 86400000                   # 24 heures en millisecondes
+  refresh-expiration: 604800000          # 7 jours en millisecondes
 
 app:
   upload:
