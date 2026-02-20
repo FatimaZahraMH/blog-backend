@@ -16,14 +16,44 @@ Backend REST API pour une application de blog  avec Spring Boot, PostgreSQL et J
 
 ---
 
-## Endpoints principaux
+## 🔌 Endpoints principaux
 
+###  Endpoints publics (sans authentification)
 | Méthode | Endpoint | Description |
-|---------|---------|-------------|
-| GET     | `/api/v1/articles/search` | Recherche avancée |
-| POST    | `/api/v1/articles` | Créer un article (ROLE: AUTHOR) |
-| POST    | `/api/v1/articles/{id}/cover-image` | Upload d’une image de couverture |
-| GET     | `/api/v1/articles/{id}/comments` | Récupérer les commentaires |
+|---------|----------|-------------|
+| `GET` | `/api/v1/articles/**` | Consultation des articles |
+| `GET` | `/api/v1/comments/**` | Consultation des commentaires |
+| `GET` | `/images/**` | Accès aux images uploadées |
+| `POST` | `/api/v1/auth/**` | Authentification (login, register, refresh) |
+| `GET` | `/api-docs/**` | Documentation OpenAPI |
+| `GET` | `/swagger-ui/**` | Interface Swagger UI |
+| `GET` | `/swagger-ui.html` | Page Swagger UI |
+
+###  Commentaires (utilisateurs authentifiés)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `POST` | `/api/v1/articles/{id}/comments` | Ajouter un commentaire | USER, AUTHOR, ADMIN |
+| `PUT` | `/api/v1/comments/{id}` | Modifier un commentaire | USER, AUTHOR, ADMIN |
+| `DELETE` | `/api/v1/comments/{id}` | Supprimer un commentaire | USER, AUTHOR, ADMIN |
+
+###  Articles (AUTHOR et ADMIN uniquement)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `POST` | `/api/v1/articles` | Créer un nouvel article | AUTHOR, ADMIN |
+| `POST` | `/api/v1/articles/{id}/cover-image` | Uploader une image de couverture | AUTHOR, ADMIN |
+| `PUT` | `/api/v1/articles/{id}` | Modifier un article | AUTHOR, ADMIN |
+| `DELETE` | `/api/v1/articles/{id}` | Supprimer un article | AUTHOR, ADMIN |
+
+###  Administration (ADMIN uniquement)
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `*` | `/api/v1/admin/**` | Toutes les opérations d'administration | ADMIN |
+
+###  Autres endpoints
+| Méthode | Endpoint | Description | Rôle requis |
+|---------|----------|-------------|-------------|
+| `*` | `/**` | Tous les autres endpoints non listés | Authentification requise |
+
 
 ---
 
