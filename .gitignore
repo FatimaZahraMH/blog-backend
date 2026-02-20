@@ -1,0 +1,45 @@
+# ── Fichiers compilés ────────────────────────────────
+*.class
+target/
+build/
+
+# ── Archives / packages ─────────────────────────────
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ── Maven ──────────────────────────────────────────
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+
+# ── IntelliJ IDEA ──────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ── Windows ────────────────────────────────
+Thumbs.db
+
+# ── Logs ──────────────────────────────────────────
+*.log
+logs/
+
+# ── Fichiers temporaires ───────────────────────────
+*.tmp
+*.bak
+*.swp
+*~
+
+# ── Fichiers de configuration sensibles ────────────
+
+application.yml
+
+# ── Uploads / fichiers utilisateurs ───────────────
+uploads/
