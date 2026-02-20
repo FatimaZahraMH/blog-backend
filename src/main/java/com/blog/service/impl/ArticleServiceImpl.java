@@ -127,7 +127,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     public PageResponse<ArticleResponse> getArticlesByAuthor(Long authorId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return toPageResponse(articleRepository.findByAuthorId(authorId, pageable));
+        return toPageResponse(
+                articleRepository.findByAuthorIdAndPublished(authorId, true, pageable)
+        );
     }
 
     @Override
