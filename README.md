@@ -52,38 +52,40 @@ hasCoverImage - Articles avec image de couverture
 authorId - Articles d'un auteur spécifique
 
 ## Configuration
-Créez un fichier application.yml à la racine du projet :
 
+Créez un fichier `application.yml` à la racine du projet :
+
+```yaml
 server:
   port: 8080
 
 spring:
   application:
     name: blog-backend
-
+  
   datasource:
     url: jdbc:postgresql://localhost:5432/blogdb
     username: ton_utilisateur           # Remplace par ton username PostgreSQL
     password: ton_mot_de_passe          # Remplace par ton mot de passe
     driver-class-name: org.postgresql.Driver
-
-spring:
+  
   jpa:
     hibernate:
-      ddl-auto: validate        
-    show-sql: true              
+      ddl-auto: validate
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Dialecte PostgreSQL
-        format_sql: true       
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml  # Fichier de migration
+    change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
 
 jwt:
   secret: ton_secret_jwt                # Remplace par une clé aléatoire pour JWT
-  expiration: 86400000
-  refresh-expiration: 604800000
+  expiration: 86400000                   # 24 heures en millisecondes
+  refresh-expiration: 604800000          # 7 jours en millisecondes
 
 app:
   upload:
