@@ -19,51 +19,42 @@ public class ArticlePredicate {
         BooleanBuilder builder = new BooleanBuilder();
 
 
-        if (hasText(filter.getKeyword())) {
-            String kw = filter.getKeyword().toLowerCase();
+        if (hasText(filter.keyword())) {
             builder.and(
-                article.title.containsIgnoreCase(kw)
-                    .or(article.content.containsIgnoreCase(kw))
-                    .or(article.summary.containsIgnoreCase(kw))
+                    article.title.containsIgnoreCase(filter.keyword())
+                            .or(article.content.containsIgnoreCase(filter.keyword()))
             );
         }
 
-
-        if (hasText(filter.getAuthorUsername())) {
+        if (hasText(filter.authorUsername())) {
             builder.and(
-                article.author.username.equalsIgnoreCase(filter.getAuthorUsername())
+                    article.author.username.equalsIgnoreCase(filter.authorUsername())
             );
         }
 
-
-        if (filter.getTags() != null && !filter.getTags().isEmpty()) {
-            builder.and(
-                article.tags.any().name.in(filter.getTags())
-            );
+        if (filter.tags() != null && !filter.tags().isEmpty()) {
+            builder.and(article.tags.any().name.in(filter.tags()));
         }
 
-
-        if (filter.getPublished() != null) {
-            builder.and(article.published.eq(filter.getPublished()));
+        if (filter.published() != null) {
+            builder.and(article.published.eq(filter.published()));
         } else {
-
             builder.and(article.published.isTrue());
         }
 
-
-        if (filter.getCreatedAfter() != null) {
-            builder.and(article.createdAt.after(filter.getCreatedAfter()));
+        if (filter.createdAfter() != null) {
+            builder.and(article.createdAt.after(filter.createdAfter()));
         }
 
-
-        if (filter.getCreatedBefore() != null) {
-            builder.and(article.createdAt.before(filter.getCreatedBefore()));
+        if (filter.createdBefore() != null) {
+            builder.and(article.createdAt.before(filter.createdBefore()));
         }
 
-
-        if (Boolean.TRUE.equals(filter.getHasCoverImage())) {
-            builder.and(article.coverImageUrl.isNotNull()
-                    .and(article.coverImageUrl.isNotEmpty()));
+        if (Boolean.TRUE.equals(filter.hasCoverImage())) {
+            builder.and(
+                    article.coverImageUrl.isNotNull()
+                            .and(article.coverImageUrl.isNotEmpty())
+            );
         }
 
         return builder;

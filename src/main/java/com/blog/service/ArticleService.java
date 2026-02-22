@@ -2,6 +2,7 @@ package com.blog.service;
 
 import com.blog.dto.request.ArticleRequest;
 import com.blog.dto.request.ArticleSearchFilter;
+import com.blog.dto.request.PageParametres;
 import com.blog.dto.response.ArticleResponse;
 import com.blog.dto.response.PageResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,8 @@ public interface ArticleService {
     ArticleResponse getArticleBySlug(String slug);
 
 
-    PageResponse<ArticleResponse> searchArticles(ArticleSearchFilter filter, int page, int size, String sortBy);
+    PageResponse<ArticleResponse> searchArticles(
+            ArticleSearchFilter filter, PageParametres page);
 
 
     PageResponse<ArticleResponse> getArticlesByAuthor(Long authorId, int page, int size);

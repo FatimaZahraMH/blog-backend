@@ -1,5 +1,6 @@
 package com.blog.config;
 
+import com.blog.constants.ApiRoutes;
 import com.blog.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class SecurityConfig {
 
 
     private static final String[] PUBLIC_URLS = {
-            "/api/v1/auth/**",
+            "/api/auth/**",
             "/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
@@ -45,21 +46,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(PUBLIC_URLS).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/articles/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/articles/*/comments")
+                        .requestMatchers(HttpMethod.GET,  ApiRoutes.ARTICLES + "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, ApiRoutes.COMMENTS + "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, ApiRoutes.API + "/articles/*/comments")
                         .authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**")
+                        .requestMatchers(HttpMethod.PUT, ApiRoutes.COMMENTS + "/**")
                         .authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**")
+                        .requestMatchers(HttpMethod.DELETE, ApiRoutes.COMMENTS + "/**")
                         .authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/articles", "/api/v1/articles/*/cover-image")
+                        .requestMatchers(HttpMethod.POST, ApiRoutes.ARTICLES, ApiRoutes.ARTICLES + "/*/cover-image")
                         .hasAnyRole("AUTHOR", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**")
+                        .requestMatchers(HttpMethod.PUT, ApiRoutes.ARTICLES + "/**")
                         .hasAnyRole("AUTHOR", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/**")
+                        .requestMatchers(HttpMethod.DELETE, ApiRoutes.ARTICLES + "/**")
                         .hasAnyRole("AUTHOR", "ADMIN")
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

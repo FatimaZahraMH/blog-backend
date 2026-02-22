@@ -1,28 +1,38 @@
 package com.blog.dto.request;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-public class ArticleSearchFilter {
 
-    private String keyword;
+public record ArticleSearchFilter(
 
-    private String authorUsername;
+        @Parameter(description = "Mot-clé dans titre/contenu/résumé")
+        @Size(min = 2, max = 100)
+        String keyword,
 
-    private List<String> tags;
+        @Parameter(description = "Username de l'auteur")
+        String authorUsername,
 
-    private Boolean published;
+        @Parameter(description = "Filtrer par tag(s)")
+        List<String> tags,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAfter;
+        @Parameter(description = "true = publiés, false = brouillons")
+        Boolean published,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdBefore;
+        @Parameter(description = "Articles créés après (ISO 8601)")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        LocalDateTime createdAfter,
 
+        @Parameter(description = "Articles créés avant (ISO 8601)")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        LocalDateTime createdBefore,
 
-    private Boolean hasCoverImage;
-}
+        @Parameter(description = "true = avec image de couverture uniquement")
+        Boolean hasCoverImage
+
+) {}

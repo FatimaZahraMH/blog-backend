@@ -1,5 +1,6 @@
 package com.blog.controller;
 
+import com.blog.constants.ApiRoutes;
 import com.blog.dto.request.CommentRequest;
 import com.blog.dto.response.CommentResponse;
 import com.blog.dto.response.PageResponse;
@@ -16,14 +17,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(ApiRoutes.API)
 @RequiredArgsConstructor
 @Tag(name = "Commentaires", description = "Gestion des commentaires")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/articles/{articleId}/comments")
+    @GetMapping(ApiRoutes.ARTICLE_COMMENTS)
     @Operation(summary = "Récupérer les commentaires d'un article")
     public ResponseEntity<PageResponse<CommentResponse>> getByArticle(
             @PathVariable Long articleId,
@@ -32,7 +33,7 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getCommentsByArticle(articleId, page, size));
     }
 
-    @PostMapping("/articles/{articleId}/comments")
+    @PostMapping(ApiRoutes.ARTICLE_COMMENTS)
     @Operation(summary = "Ajouter un commentaire", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long articleId,
@@ -42,7 +43,7 @@ public class CommentController {
                 .body(commentService.addComment(articleId, request, userDetails.getUsername()));
     }
 
-    @PutMapping("/comments/{commentId}")
+    @PutMapping(ApiRoutes.COMMENTS_ID)
     @Operation(summary = "Modifier un commentaire", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable Long commentId,
@@ -52,7 +53,7 @@ public class CommentController {
                 commentService.updateComment(commentId, request, userDetails.getUsername()));
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping(ApiRoutes.COMMENTS_ID)
     @Operation(summary = "Supprimer un commentaire", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long commentId,

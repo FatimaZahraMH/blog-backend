@@ -2,6 +2,7 @@ package com.blog.service.impl;
 
 import com.blog.dto.request.ArticleRequest;
 import com.blog.dto.request.ArticleSearchFilter;
+import com.blog.dto.request.PageParametres;
 import com.blog.dto.response.ArticleResponse;
 import com.blog.dto.response.PageResponse;
 import com.blog.entity.Article;
@@ -111,15 +112,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public PageResponse<ArticleResponse> searchArticles(
-            ArticleSearchFilter filter, int page, int size, String sortBy) {
+            ArticleSearchFilter filter, PageParametres pageParam) {
 
-        Pageable  pageable   = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
-        Predicate predicate  = ArticlePredicate.build(filter);
+        Pageable pageable = PageRequest.of(
+                pageParam.page(),
+                pageParam.taille(),
+                Sort.by(Sort.Direction.DESC, pageParam.trierPar())
+        );
+
+        Predicate predicate = ArticlePredicate.build(filter);
         Page<Article> result = articleRepository.findAll(predicate, pageable);
 
-        log.debug("Recherche articles -> {} résultats", result.getTotalElements());
         return toPageResponse(result);
     }
 
